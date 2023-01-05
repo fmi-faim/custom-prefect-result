@@ -24,4 +24,4 @@ class UtilitiesTest(TestCase):
         img.set_data(self.data)
 
         h = hash_objects(img)
-        assert h == "4bed574b6d84b17b9c68c7fbae50274d"
+        assert h == "2390ea40fa8feefda37bd591daaca846"

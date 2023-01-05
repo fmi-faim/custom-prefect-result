@@ -24,9 +24,13 @@ class ImageTest(TestCase):
 
     def test_image_targtet(self):
         serializer = cpr_serializer()
+        metadata = {"axes": "YX", "spacing": 0.134, "unit": "micron"}
+        resolution = [1 / 0.134, 1 / 0.134]
 
-        img = ImageTarget.from_path(join(self.tmp_dir, "image.tif"))
+        img: ImageTarget = ImageTarget.from_path(join(self.tmp_dir, "image.tif"))
         img.set_data(self.data)
+        img.set_metadata(metadata)
+        img.set_resolution(resolution)
 
         encoded = serializer.dumps(img)
 
@@ -37,6 +41,9 @@ class ImageTest(TestCase):
         assert encoded_dict["data"]["location"] == self.tmp_dir
         assert encoded_dict["data"]["name"] == "image"
         assert encoded_dict["data"]["ext"] == ".tif"
+        assert encoded_dict["data"]["metadata"] == metadata
+        print(type(encoded_dict["data"]["resolution"]))
+        assert encoded_dict["data"]["resolution"] == resolution
         assert encoded_dict["data"]["data_hash"] == "9e9bc5323bce7d43"
 
         assert exists(join(self.tmp_dir, "image-9e9bc5323bce7d43.tif"))
@@ -47,6 +54,8 @@ class ImageTest(TestCase):
         assert img_dec.get_path() == join(self.tmp_dir, "image-9e9bc5323bce7d43.tif")
         assert img_dec.get_path() == img.get_path()
         assert img_dec.get_name() == img.get_name()
+        assert img_dec.get_metadata() == img.get_metadata()
+        assert img_dec.get_resolution() == img.get_resolution()
 
     def test_image_source(self):
         path = join(self.tmp_dir, "source_img.tif")
