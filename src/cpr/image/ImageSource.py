@@ -1,5 +1,5 @@
 from os.path import exists
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List
 
 from numpy._typing import ArrayLike
 from tifffile import imread
@@ -17,7 +17,7 @@ class ImageSource(Resource, Metadata):
         name: str,
         ext: str,
         metadata: Dict = None,
-        resolution: Tuple[Any, Any] = None,
+        resolution: List[Any] = None,
     ):
         """
         Parameters
@@ -40,11 +40,10 @@ class ImageSource(Resource, Metadata):
             name="image_file",
             ext="tif",
             metadata={
-                'axes': 'YX',
-                'spacing': 0.134,
-                'unit': 'micron'
+                "axes": "YX",
+                "unit": "micron",
             },
-            resolution=(1/0.134, 1/0.134),
+            resolution=[1 / 0.134, 1 / 0.134],
         )
         img.get_data()
         """
@@ -58,9 +57,7 @@ class ImageSource(Resource, Metadata):
         )
 
     @classmethod
-    def from_path(
-        cls, path: str, metadata: Dict = None, resolution: Tuple[Any, Any] = None
-    ):
+    def from_path(cls, path: str, metadata: Dict = None, resolution: List[Any] = None):
         """Create new instance from file-path.
 
         Parameters
@@ -81,11 +78,10 @@ class ImageSource(Resource, Metadata):
         img = ImageSource.from_path(
             path="/path/to/dir/image_file.tif",
             metadata={
-                'axes': 'YX',
-                'spacing': 0.134,
-                'unit': 'micron'
+                "axes": "YX",
+                "unit": "micron",
             },
-            resolution=(1/0.134, 1/0.134),
+            resolution=[1 / 0.134, 1 / 0.134],
         )
         img.get_data()
         """

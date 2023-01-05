@@ -55,11 +55,10 @@ class ImageTarget(Target, Metadata):
             name="image_file",
             ext="tif",
             metadata={
-                'axes': 'YX',
-                'spacing': 0.134,
-                'unit': 'micron'
+                "axes": "YX",
+                "unit": "micron",
             },
-            resolution=(1/0.134, 1/0.134),
+            resolution=[1 / 0.134, 1 / 0.134],
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
@@ -95,11 +94,10 @@ class ImageTarget(Target, Metadata):
         img = ImageTarget.from_path(
             path="/path/to/dir/image_file.tif",
             metadata={
-                'axes': 'YX',
-                'spacing': 0.134,
-                'unit': 'micron'
+                "axes": "YX",
+                "unit": "micron",
             },
-            resolution=(1/0.134, 1/0.134),
+            resolution=[1 / 0.134, 1 / 0.134],
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
