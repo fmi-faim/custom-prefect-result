@@ -1,5 +1,7 @@
 # Custom Prefect Result (CPR)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![tests](https://github.com/fmi-faim/custom-prefect-result/workflows/tests/badge.svg)](https://github.com/fmi-faim/custom-prefect-result/actions)
+[![codecov](https://codecov.io/gh/fmi-faim/custom-prefect-result/branch/main/graph/badge.svg)](https://codecov.io/gh/fmi-faim/custom-prefect-result)
 
 Custom Prefect Result (CPR) enables task-run result caching in Prefect, while keeping the result data in any file-format e.g. tiff-file for image data or csv-file for tabular data.
 This works by providing a custom `object_encoder` and `object_decoder` to `prefect.serializers.JSONSerializer`, which takes care of serializing all objects of type `cpr.Resource.Resource`.
