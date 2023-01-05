@@ -152,7 +152,7 @@ venv/
 .DS_Store
 
 # written by setuptools_scm
-../custom-prefect-result/src/cpr/_version.py
+src/cpr/_version.py
 
 # jupyter notebooks
 .ipynb
