@@ -37,7 +37,6 @@ from glob import glob
 from os import makedirs
 from os.path import join, exists
 
-from cpr.Resource import Resource
 from cpr.Serializer import cpr_serializer
 from cpr.image import ImageSource
 from cpr.image.ImageTarget import ImageTarget
@@ -52,17 +51,25 @@ from scipy.ndimage import gaussian_filter
 def list_files(input_data_dir):
     images = []
     for f in glob(join(input_data_dir, "*.tif")):
-        images.append(ImageSource.from_path(f))
+        images.append(ImageSource.from_path(f,
+                                            metadata={
+                                                "axes": "YX",
+                                                "unit": "micron",
+                                            },
+                                            resolution=[1 / 0.134, 1 / 0.134]))
 
     return images
 
 
 @task(cache_key_fn=task_input_hash) # Use cpr.utilities.utilities.task_input_hash to hash cpr.Resource.Resource input parameters correctly
 def denoise_image(result_dir,
-                  image: Resource,
+                  image: ImageSource,
                   sigma):
     output = ImageTarget.from_path(
-        path=join(result_dir, f"{image.get_name()}.tif"))
+        path=join(result_dir, f"{image.get_name()}.tif"),
+        metadata=image.get_metadata(),
+        resolution=image.get_resolution()
+    )
 
     output.set_data(gaussian_filter(image.get_data(), sigma))
 
@@ -70,10 +77,13 @@ def denoise_image(result_dir,
 
 @task(cache_key_fn=task_input_hash)
 def segment_image(result_dir: str,
-                  denoised: Resource,
+                  denoised: ImageTarget,
                   threshold: float):
     output = ImageTarget.from_path(
-        path=join(result_dir, f"{denoised.get_name()}.tif"))
+        path=join(result_dir, f"{denoised.get_name()}.tif"),
+        metadata=denoised.get_metadata(),
+        resolution=denoised.get_resolution()
+    )
 
     output.set_data(denoised.get_data() > threshold)
 
