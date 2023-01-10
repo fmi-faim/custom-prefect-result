@@ -55,10 +55,13 @@ class ImageTarget(Target, Metadata):
             name="image_file",
             ext="tif",
             metadata={
-                "axes": "YX",
-                "unit": "micron",
+                'axes': 'YX',
+                'PhysicalSizeX': 0.134,
+                'PhysicalSizeXUnit': 'micron',
+                'PhysicalSizeY': 0.134,
+                'PhysicalSizeYUnit': 'micron',
             },
-            resolution=[1 / 0.134, 1 / 0.134],
+            resolution=[1e4 / 0.134, 1e4 / 0.134],
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
@@ -94,10 +97,13 @@ class ImageTarget(Target, Metadata):
         img = ImageTarget.from_path(
             path="/path/to/dir/image_file.tif",
             metadata={
-                "axes": "YX",
-                "unit": "micron",
+                'axes': 'YX',
+                'PhysicalSizeX': 0.134,
+                'PhysicalSizeXUnit': 'micron',
+                'PhysicalSizeY': 0.134,
+                'PhysicalSizeYUnit': 'micron',
             },
-            resolution=[1 / 0.134, 1 / 0.134],
+            resolution=[1e4 / 0.134, 1e4 / 0.134],
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
@@ -167,8 +173,8 @@ class ImageTarget(Target, Metadata):
                     self.get_path(),
                     self._data,
                     compression="zlib",
-                    imagej=True,
                     resolution=tuple(self.resolution),
+                    resolutionunit="CENTIMETER",
                     metadata=self.metadata,
                 )
             elif self.metadata is not None:
@@ -177,7 +183,8 @@ class ImageTarget(Target, Metadata):
                     self.get_path(),
                     self._data,
                     compression="zlib",
-                    imagej=True,
+                    resolution=(1.0,) * len(self._data.shape),
+                    resolutionunit="CENTIMETER",
                     metadata=self.metadata,
                 )
             elif self.resolution is not None:
@@ -186,8 +193,8 @@ class ImageTarget(Target, Metadata):
                     self.get_path(),
                     self._data,
                     compression="zlib",
-                    imagej=True,
                     resolution=tuple(self.resolution),
+                    resolutionunit="CENTIMETER",
                 )
             else:
                 # Save without metadata
