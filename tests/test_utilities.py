@@ -1,3 +1,4 @@
+import datetime
 import os
 import shutil
 from os.path import join
@@ -25,3 +26,7 @@ class UtilitiesTest(TestCase):
 
         h = hash_objects(img)
         assert h == "2390ea40fa8feefda37bd591daaca846"
+
+        tmp = datetime.date(2023, 1, 16)
+        h = hash_objects(tmp)
+        assert h == "f2d0c50afd37a85d67c9f13a33c21e8c"

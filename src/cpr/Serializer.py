@@ -22,7 +22,7 @@ def target_encoder(obj: Any) -> Any:
             "data": obj.serialize(),
         }
     else:
-        prefect_json_object_encoder(obj)
+        return prefect_json_object_encoder(obj)
 
 
 def target_decoder(result: dict):
