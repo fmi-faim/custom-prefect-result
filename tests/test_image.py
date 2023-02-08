@@ -22,7 +22,7 @@ class ImageTest(TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.tmp_dir)
 
-    def test_image_targtet(self):
+    def test_image_target(self):
         serializer = cpr_serializer()
         metadata = {"axes": "YX", "spacing": 0.134, "unit": "micron"}
         resolution = [1 / 0.134, 1 / 0.134]
