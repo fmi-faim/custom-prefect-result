@@ -74,4 +74,4 @@ class CSVTarget(Target):
 
     def _write_data(self):
         if self._data is not None:
-            self._data.to_csv(self.get_path())
+            self._data.to_csv(self.get_path(), mode="w")
