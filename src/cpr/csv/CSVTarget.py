@@ -73,5 +73,5 @@ class CSVTarget(Target):
         return xxhash.xxh3_64(hash_pandas_object(a).values.tobytes()).hexdigest()
 
     def _write_data(self):
-        if self._data is not None:
+        if self._data is not None and not exists(self.get_path()):
             self._data.to_csv(self.get_path(), mode="w")

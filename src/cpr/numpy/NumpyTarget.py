@@ -76,5 +76,5 @@ class NumpyTarget(Target):
         return xxhash.xxh3_64(data).hexdigest()
 
     def _write_data(self):
-        if self._data is not None:
+        if self._data is not None and not exists(self.get_path()):
             np.save(self.get_path(), self._data)

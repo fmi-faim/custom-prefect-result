@@ -166,7 +166,7 @@ class ImageTarget(Target, Metadata):
         return xxhash.xxh3_64(data).hexdigest()
 
     def _write_data(self):
-        if self._data is not None:
+        if self._data is not None and not exists(self.get_path()):
             if (self.metadata is not None) and (self.resolution is not None):
                 # Save with metadata and resolution information
                 imwrite(
