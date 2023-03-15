@@ -43,7 +43,6 @@ class Target(Resource):
             Data stored with this Target
         """
         self._data = data
-        self.compute_data_hash()
 
     def _hash_data(self, data) -> str:
         ...
@@ -53,6 +52,7 @@ class Target(Resource):
 
     def serialize(self):
         """Persist data and serialize to JSON serializable dict."""
+        self.compute_data_hash()
         self._write_data()
         d = super(Target, self).serialize()
         d["data_hash"] = self.data_hash
