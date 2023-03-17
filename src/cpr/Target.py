@@ -32,7 +32,8 @@ class Target(Resource):
 
     def compute_data_hash(self):
         """Compute and set current data_hash."""
-        self.data_hash = self._hash_data(self._data)
+        if self._data is not None:
+            self.data_hash = self._hash_data(self._data)
 
     def set_data(self, data):
         """Set data and compute data_hash.
