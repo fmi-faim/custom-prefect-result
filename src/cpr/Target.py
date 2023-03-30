@@ -1,3 +1,4 @@
+import gc
 from os.path import join
 
 from cpr.Resource import Resource
@@ -55,6 +56,9 @@ class Target(Resource):
         """Persist data and serialize to JSON serializable dict."""
         self.compute_data_hash()
         self._write_data()
+        del self._data
+        gc.collect()
+        self._data = None
         d = super(Target, self).serialize()
         d["data_hash"] = self.data_hash
         return d
