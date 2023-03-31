@@ -1,4 +1,3 @@
-from os.path import exists
 from typing import Any, Dict, List
 
 from numpy._typing import ArrayLike
@@ -91,22 +90,8 @@ class ImageSource(Resource, Metadata):
         img.resolution = resolution
         return img
 
-    def get_data(self) -> ArrayLike:
-        """Access image data.
-
-        The image data is cached by this function.
-
-        Returns
-        -------
-        Image data as numpy array
-        """
-
-        if self._data is None:
-            assert exists(self.get_path()), f"{self.get_path()} does not " f"exist."
-
-            self._data = imread(self.get_path())
-
-        return self._data
+    def _read_data(self) -> ArrayLike:
+        return imread(self.get_path())
 
     def serialize(self) -> Dict:
         """Serialize to JSON serializable dict."""

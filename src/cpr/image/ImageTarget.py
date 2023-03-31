@@ -135,26 +135,13 @@ class ImageTarget(Target, Metadata):
 
         self.resolution = resolution
 
-    def get_data(self) -> ArrayLike:
-        """Access image data.
-
-        The image data is cached by this function.
-
-        Returns
-        -------
-        Image data as numpy array
-        """
-
-        if self._data is None:
-            assert exists(self.get_path()), f"{self.get_path()} does not " f"exist."
-
-            self._data = imread(self.get_path())
-            assert self._hash_data(self._data) == self.data_hash, (
-                "Loaded image has a different hash. This data is either "
-                "from a different run or corrupted."
-            )
-
-        return self._data
+    def _read_data(self) -> ArrayLike:
+        data = imread(self.get_path())
+        assert self._hash_data(data) == self.data_hash, (
+            "Loaded image has a different hash. This data is either "
+            "from a different run or corrupted."
+        )
+        return data
 
     def _hash_data(self, a):
         data = bytes()
