@@ -48,7 +48,7 @@ class CSVTest(TestCase):
 
     def test_csv_source(self):
         path = join(self.tmp_dir, "source_table.csv")
-        self.data.to_csv(path, index=False)
+        self.data.to_csv(path, index=True)
 
         csv = CSVSource.from_path(path)
 

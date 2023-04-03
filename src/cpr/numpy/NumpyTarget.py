@@ -2,7 +2,6 @@ from os.path import exists
 
 import numpy as np
 import xxhash
-from numpy._typing import ArrayLike
 
 from cpr.Target import Target
 
@@ -46,25 +45,13 @@ class NumpyTarget(Target):
             data_hash=data_hash,
         )
 
-    def get_data(self) -> ArrayLike:
-        """Access numpy array data.
-
-        The data is cached by this function.
-
-        Returns
-        -------
-        Array data.
-        """
-        if self._data is None:
-            assert exists(self.get_path()), f"{self.get_path()} does not " f"exist."
-
-            self._data = np.load(self.get_path())
-            assert self._hash_data(self._data) == self.data_hash, (
-                "Loaded data has a different hash. This data is either "
-                "from a different run or corrupted."
-            )
-
-        return self._data
+    def _read_data(self):
+        data = np.load(self.get_path())
+        assert self._hash_data(data) == self.data_hash, (
+            "Loaded data has a different hash. This data is either "
+            "from a different run or corrupted."
+        )
+        return data
 
     def _hash_data(self, a) -> str:
         data = bytes()

@@ -46,8 +46,14 @@ class Resource(ABC):
         name, ext = splitext(file_name)
         return cls(location=location, name=name, ext=ext)
 
-    def get_data(self):
+    def get_data(self, cache=False):
         """Access the data."""
+        if cache:
+            self._data = self._read_data()
+        else:
+            return self._read_data()
+
+    def _read_data(self):
         ...
 
     def get_name(self) -> str:
