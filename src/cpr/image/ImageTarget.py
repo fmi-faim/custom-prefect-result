@@ -163,6 +163,7 @@ class ImageTarget(Target, Metadata):
                     resolution=tuple(self.resolution),
                     resolutionunit="CENTIMETER",
                     metadata=self.metadata,
+                    imagej=True,
                 )
             elif self.metadata is not None:
                 # Save with metadata
@@ -173,6 +174,7 @@ class ImageTarget(Target, Metadata):
                     resolution=(1.0,) * len(self._data.shape),
                     resolutionunit="CENTIMETER",
                     metadata=self.metadata,
+                    imagej=True,
                 )
             elif self.resolution is not None:
                 # Save with resolution information
@@ -182,6 +184,7 @@ class ImageTarget(Target, Metadata):
                     compression="zlib",
                     resolution=tuple(self.resolution),
                     resolutionunit="CENTIMETER",
+                    imagej=True,
                 )
             else:
                 # Save without metadata
