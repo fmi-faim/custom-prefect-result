@@ -1,5 +1,5 @@
 from abc import ABC
-from os.path import join, split, splitext
+from os.path import exists, join, split, splitext
 from typing import Any
 
 
@@ -48,8 +48,12 @@ class Resource(ABC):
 
     def get_data(self, cache=False):
         """Access the data."""
+        assert exists(self.get_path()), (
+            f"Result does not exist at " f"{self.get_path()}."
+        )
         if cache:
             self._data = self._read_data()
+            return self._data
         else:
             return self._read_data()
 
