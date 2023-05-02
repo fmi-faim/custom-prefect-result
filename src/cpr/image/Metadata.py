@@ -7,8 +7,15 @@ class Metadata(ABC):
 
     metadata: Dict
     resolution: List[Any]
+    imagej: bool
 
-    def __init__(self, metadata: Dict = None, resolution: List[Any] = None, **kwargs):
+    def __init__(
+        self,
+        metadata: Dict = None,
+        resolution: List[Any] = None,
+        imagej: bool = True,
+        **kwargs
+    ):
         """
         Parameters
         ----------
@@ -16,10 +23,13 @@ class Metadata(ABC):
             Image metadata, by default None
         resolution
             Resolution metadata, by default None
+        imagej
+            Save imagej compatible
         """
 
         self.metadata = metadata
         self.resolution = resolution
+        self.imagej = imagej
         super(Metadata, self).__init__(**kwargs)
 
     def get_metadata(self) -> Dict:

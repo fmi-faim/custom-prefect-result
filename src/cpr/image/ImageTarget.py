@@ -30,6 +30,7 @@ class ImageTarget(Target, Metadata):
         ext: str,
         metadata: Dict = None,
         resolution: List[Any] = None,
+        imagej: bool = True,
         data_hash: str = None,
     ):
         """
@@ -45,6 +46,8 @@ class ImageTarget(Target, Metadata):
             Image metadata passed on to tifffile, by default None
         resolution
             Resolution metadata passed on to tifffile, by default None
+        imagej
+            Save imagej compatible, by default True.
         data_hash
             Image data hash, by default None
 
@@ -62,6 +65,7 @@ class ImageTarget(Target, Metadata):
                 'PhysicalSizeYUnit': 'micron',
             },
             resolution=[1e4 / 0.134, 1e4 / 0.134],
+            imagej=True,
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
@@ -73,10 +77,17 @@ class ImageTarget(Target, Metadata):
             data_hash=data_hash,
             metadata=metadata,
             resolution=resolution,
+            imagej=imagej,
         )
 
     @classmethod
-    def from_path(cls, path: str, metadata: Dict = None, resolution: List[Any] = None):
+    def from_path(
+        cls,
+        path: str,
+        metadata: Dict = None,
+        resolution: List[Any] = None,
+        imagej: bool = True,
+    ):
         """Create new instance from file-path.
 
         Parameters
@@ -87,6 +98,8 @@ class ImageTarget(Target, Metadata):
             Image metadata passed on to tifffile, by default None
         resolution
             Image resolution metadata passed on to tifffile, by default None
+        imagej
+           Save imagej compatible.
 
         Returns
         -------
@@ -104,6 +117,7 @@ class ImageTarget(Target, Metadata):
                 'PhysicalSizeYUnit': 'micron',
             },
             resolution=[1e4 / 0.134, 1e4 / 0.134],
+            imagej=True,
         )
         img.set_data(np.random.rand(0, 255, (100, 100)))
         img.get_data()
@@ -111,6 +125,7 @@ class ImageTarget(Target, Metadata):
         img = super(ImageTarget, cls).from_path(path=path)
         img.metadata = metadata
         img.resolution = resolution
+        img.imagej = imagej
         return img
 
     def set_metadata(self, metadata: Dict):
@@ -163,7 +178,7 @@ class ImageTarget(Target, Metadata):
                     resolution=tuple(self.resolution),
                     resolutionunit="CENTIMETER",
                     metadata=self.metadata,
-                    imagej=True,
+                    imagej=self.imagej,
                 )
             elif self.metadata is not None:
                 # Save with metadata
@@ -174,7 +189,7 @@ class ImageTarget(Target, Metadata):
                     resolution=(1.0,) * len(self._data.shape),
                     resolutionunit="CENTIMETER",
                     metadata=self.metadata,
-                    imagej=True,
+                    imagej=self.imagej,
                 )
             elif self.resolution is not None:
                 # Save with resolution information
@@ -184,15 +199,18 @@ class ImageTarget(Target, Metadata):
                     compression="zlib",
                     resolution=tuple(self.resolution),
                     resolutionunit="CENTIMETER",
-                    imagej=True,
+                    imagej=self.imagej,
                 )
             else:
                 # Save without metadata
-                imwrite(self.get_path(), self._data, compression="zlib")
+                imwrite(
+                    self.get_path(), self._data, compression="zlib", imagej=self.imagej
+                )
 
     def serialize(self):
         """Persist image and serialize to JSON serializable dict."""
         d = super(ImageTarget, self).serialize()
         d["resolution"] = self.resolution
         d["metadata"] = self.metadata
+        d["imagej"] = self.imagej
         return d

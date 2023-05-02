@@ -25,7 +25,7 @@ class UtilitiesTest(TestCase):
         img.set_data(self.data)
 
         h = hash_objects(img)
-        assert h == "2390ea40fa8feefda37bd591daaca846"
+        assert h == "f055cf7c5246f7ef4722003123fa7c4b"
 
         tmp = datetime.date(2023, 1, 16)
         h = hash_objects(tmp)
